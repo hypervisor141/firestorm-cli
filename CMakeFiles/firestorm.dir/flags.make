@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = 
 
-CXX_FLAGS = -g
+CXX_FLAGS = -g -static -g -std=c++17 -Wall -Wextra -Wstack-protector -fstack-protector-all -pie -fPIE -ftrapv -D_FORTIFY_SOURCE=2 -O2 -Wl,-z,reloz,now
 

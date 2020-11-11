@@ -25,12 +25,12 @@ fsm::fsm(){
 };
 
 fsm::~fsm(){
-    for(int i = 0; i < entries.size(); i++){
+    for(unsigned int i = 0; i < entries.size(); i++){
         delete entries.at(i);
     }
 };
 
-void fsm::save(std::string &location){
+void fsm::save(const std::string &location){
     struct stat statinfo;
     
     if(stat(location.c_str(), &statinfo) == 0){
@@ -48,7 +48,7 @@ void fsm::save(std::string &location){
 
     entry *e;
 
-    for(int i = 0; i < entries.size(); i++){
+    for(unsigned int i = 0; i < entries.size(); i++){
         e = entries.at(i);
 
         iv = e->name.size();
@@ -71,23 +71,23 @@ void fsm::save(std::string &location){
         
         file.write(e->name.c_str(), e->name.size());
 
-        for(int i2 = 0; i2 < e->positions.size(); i2++){
+        for(unsigned int i2 = 0; i2 < e->positions.size(); i2++){
             fv = e->positions.at(i2);
             file.write((char*)&fv, SIZE_FLOAT);
         }
-        for(int i2 = 0; i2 < e->colors.size(); i2++){
+        for(unsigned int i2 = 0; i2 < e->colors.size(); i2++){
             fv = e->colors.at(i2);
             file.write((char*)&fv, SIZE_FLOAT);
         }
-        for(int i2 = 0; i2 < e->texcoords.size(); i2++){
+        for(unsigned int i2 = 0; i2 < e->texcoords.size(); i2++){
             fv = e->texcoords.at(i2);
             file.write((char*)&fv, SIZE_FLOAT);
         }
-        for(int i2 = 0; i2 < e->normals.size(); i2++){
+        for(unsigned int i2 = 0; i2 < e->normals.size(); i2++){
             fv = e->normals.at(i2);
             file.write((char*)&fv, SIZE_FLOAT);
         }
-        for(int i2 = 0; i2 < e->indices.size(); i2++){
+        for(unsigned int i2 = 0; i2 < e->indices.size(); i2++){
             sv = e->indices.at(i2);
             file.write((char*)&sv, SIZE_SHORT);
         }
@@ -96,7 +96,7 @@ void fsm::save(std::string &location){
     file.flush();
 };
 
-void fsm::load(loadconfig &config, std::string &location){
+void fsm::load(const loadconfig &config, const std::string &location){
     std::ifstream file(location, std::fstream::binary | std::fstream::in);
 
     short *sbuffer = NULL;
@@ -199,7 +199,7 @@ void fsm::load(loadconfig &config, std::string &location){
 };
 
 void fsm::clear(){
-    for(int i = 0; i < entries.size(); i++){
+    for(unsigned int i = 0; i < entries.size(); i++){
         delete entries.at(i);
     }
 

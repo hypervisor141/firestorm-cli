@@ -16,12 +16,14 @@ vector
 
 /home/shayan/data/cpp/firestorm/include/loadconfig.h
 
-/home/shayan/data/cpp/firestorm/include/utils.h
-algorithm
+/home/shayan/data/cpp/firestorm/include/ply.h
+fsm.h
+/home/shayan/data/cpp/firestorm/include/fsm.h
+loadconfig.h
+/home/shayan/data/cpp/firestorm/include/loadconfig.h
+string
 -
-cctype
--
-locale
+vector
 -
 
 /home/shayan/data/cpp/firestorm/include/wavefront.h
@@ -34,15 +36,19 @@ string
 vector
 -
 
-/home/shayan/data/cpp/firestorm/src/wavefront.cpp
+/home/shayan/data/cpp/firestorm/src/main.cpp
+../include/ply.h
+/home/shayan/data/cpp/firestorm/include/ply.h
 ../include/wavefront.h
 /home/shayan/data/cpp/firestorm/include/wavefront.h
-../include/utils.h
-/home/shayan/data/cpp/firestorm/include/utils.h
+cerrno
+-
 iostream
 -
-fstream
+string
 -
-boost/algorithm/string.hpp
+filesystem
+-
+wordexp.h
 -
 

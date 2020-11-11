@@ -2,5 +2,5 @@
 
 ./maker
 printf "\n"
-bin/firestorm
+bin/firestorm "$@"
 printf "\n"

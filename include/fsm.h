@@ -33,8 +33,8 @@ class fs::fsm{
     explicit fsm();
     ~fsm();
     
-    void save(std::string &location);
-    void load(loadconfig &config, std::string &location);
+    void save(const std::string &location);
+    void load(const loadconfig &config, const std::string &location);
     void clear();
 };
 
