@@ -1,0 +1,6 @@
+#!/bin/bash
+
+./maker
+printf "\n"
+bin/firestorm
+printf "\n"

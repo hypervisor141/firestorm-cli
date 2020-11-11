@@ -1,0 +1,6 @@
+#!/bin/bash
+
+printf "building...\n\n"
+./maker
+printf "running gdb...\n\n"
+gdb bin/run

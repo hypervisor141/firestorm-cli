@@ -1,0 +1,6 @@
+#!/bin/bash
+
+printf "building...\n\n"
+./maker
+printf "running valgrind...\n\n"
+valgrind --leak-check=full --track-origins=yes ./bin/run

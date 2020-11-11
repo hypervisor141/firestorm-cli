@@ -1,0 +1,3 @@
+/home/shayan/data/cpp/firestorm/CMakeFiles/rebuild_cache.dir
+/home/shayan/data/cpp/firestorm/CMakeFiles/edit_cache.dir
+/home/shayan/data/cpp/firestorm/CMakeFiles/firestorm.dir

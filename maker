@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [[ -d ./bin/ ]]; then
+	rm ./bin/* -r
+else
+	mkdir bin/
+fi
+
+cmake .
+cmake --build .
