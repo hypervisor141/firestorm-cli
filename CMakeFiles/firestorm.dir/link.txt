@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/firestorm.dir/src/fsm.cpp.o CMakeFiles/firestorm.dir/src/loadconfig.cpp.o CMakeFiles/firestorm.dir/src/main.cpp.o CMakeFiles/firestorm.dir/src/ply.cpp.o CMakeFiles/firestorm.dir/src/uttype.cpp.o CMakeFiles/firestorm.dir/src/wavefront.cpp.o -o bin/firestorm 
