@@ -25,10 +25,8 @@ wavefront::~wavefront(){
 
 void wavefront::load(fsm &fsm, loadconfig &config, std::string &location, bool showprogress){
     std::ifstream file(location.c_str());
-
-    positioncount = 0;
-    uvcount = 0;
-    normalcount = 0;
+    
+    clear();
 
     if(showprogress){
         std::cout << "Loading[" << location.c_str() << "]\n";
@@ -46,7 +44,7 @@ void wavefront::load(fsm &fsm, loadconfig &config, std::string &location, bool s
             
             if(type.compare("o") == 0){
                 if(current != NULL){
-                    resolve(current, positioncount, uvcount, normalcount, showprogress);
+                    resolve(current, showprogress);
                     current = NULL;
 
                     if(showprogress){
@@ -57,9 +55,6 @@ void wavefront::load(fsm &fsm, loadconfig &config, std::string &location, bool s
                 current = new entry();
                 fsm.entries.push_back(current);
 
-                faces.clear();
-                tracker.clear();
-
                 if(config.names){
                     readName(current, line);
 
@@ -69,20 +64,20 @@ void wavefront::load(fsm &fsm, loadconfig &config, std::string &location, bool s
                 }
 
             }else if(type.compare("v") == 0 && config.positions){
-                readPosition(line, positioncount);
+                readPosition(line);
 
             }else if(type.compare("vt") == 0 && config.texcoords){
-                readUV(line, uvcount);
+                readUV(line);
 
             }else if(type.compare("vn") == 0 && config.normals){
-                readNormal(line, normalcount);
+                readNormal(line);
 
             }else if(type.compare("f") == 0 && config.indices){
                 readFaces(line);
             }
         }
 
-        resolve(current, positioncount, uvcount, normalcount, showprogress);
+        resolve(current, showprogress);
         
         file.close();
 
@@ -103,7 +98,7 @@ void wavefront::readName(entry *data, std::string &line){
     utils::trim(name);
 };
 
-void wavefront::readPosition(std::string &line, int &positioncount){
+void wavefront::readPosition(std::string &line){
     int index = line.find(" ");
     int secondindex = line.rfind(" ");
 
@@ -115,7 +110,7 @@ void wavefront::readPosition(std::string &line, int &positioncount){
 
 };
 
-void wavefront::readUV(std::string &line, int &uvcount){
+void wavefront::readUV(std::string &line){
     int index = line.find(" ");
 
     tmptexcoords.push_back(std::stof(line.substr(0, index)));
@@ -124,7 +119,7 @@ void wavefront::readUV(std::string &line, int &uvcount){
     uvcount++;
 };
 
-void wavefront::readNormal(std::string &line, int &normalcount){
+void wavefront::readNormal(std::string &line){
     int index = line.find(" ");
     int secondindex = line.rfind(" ");
 
@@ -143,7 +138,7 @@ void wavefront::readFaces(std::string &line){
     
     face *f = NULL;
 
-    for(int i = 0; i < 3; i++){
+    for(unsigned int i = 0; i < 3; i++){
         f = new face(
             std::stoi(line.substr(start, separator1 - start)),
             tmptexcoords.size() == 0 ? -1 : std::stoi(line.substr(separator1 + 1, separator2 - separator1)),
@@ -162,7 +157,7 @@ void wavefront::readFaces(std::string &line){
     }
 };
 
-void wavefront::resolve(entry *data, int &positioncount, int &uvcount, int &normalcount, bool showprogress){
+void wavefront::resolve(entry *data, bool showprogress){
     if(showprogress){
         std::cout << "resolving[";
     }
@@ -176,18 +171,21 @@ void wavefront::resolve(entry *data, int &positioncount, int &uvcount, int &norm
     std::vector<float> &normals = data->normals;
     std::vector<short> &indices = data->indices;
 
+    positions.reserve(tmppositions.size());
+    texcoords.reserve(tmptexcoords.size());
+    normals.reserve(tmpnormals.size());
     tracker.reserve(faces.size());
 
     PROGRESSTEXT.clear();
 
-    for(int i = 0; i < faces.size(); i++){
+    for(unsigned int i = 0; i < faces.size(); i++){
         face *f1 = faces.at(i);
         int found = -1;
 
         if(showprogress){
-            int size = PROGRESSTEXT.size();
+            unsigned int size = PROGRESSTEXT.size();
 
-            for(int index = 0; index < size; index++){
+            for(unsigned int index = 0; index < size; index++){
                 PROGRESSTEXT.replace(index, 1, "\b");
             }
 
@@ -201,8 +199,8 @@ void wavefront::resolve(entry *data, int &positioncount, int &uvcount, int &norm
 
             std::cout << PROGRESSTEXT;
         }
-
-        for(int i2 = 0; i2 < tracker.size(); i2++){
+        
+        for(unsigned int i2 = 0; i2 < tracker.size(); i2++){
             face *f2 = tracker.at(i2);
             
             if(f1->positionindex == f2->positionindex && f1->uvindex == f2->uvindex && f1->normalindex == f2->normalindex){
@@ -212,7 +210,7 @@ void wavefront::resolve(entry *data, int &positioncount, int &uvcount, int &norm
         }
 
         if(found >= 0){
-            indices.push_back((short)(found));
+            indices.push_back((short)found);
 
         }else{
             int positionindex = (f1->positionindex - poffset) * 3;
@@ -231,7 +229,28 @@ void wavefront::resolve(entry *data, int &positioncount, int &uvcount, int &norm
             normals.push_back(tmpnormals.at(normalindex + 2));
 
             indices.push_back((short)(positions.size() / 3 - 1));
+
             tracker.push_back(f1);
         }
     }
+
+    reset();
 };
+
+void wavefront::reset(){
+    tmppositions.clear();
+    tmpcolors.clear();
+    tmptexcoords.clear();
+    tmpnormals.clear();
+
+    faces.clear();
+    tracker.clear();
+}
+
+void wavefront::clear(){
+    reset();
+
+    positioncount = 0;
+    uvcount = 0;
+    normalcount = 0;
+}
