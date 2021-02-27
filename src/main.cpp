@@ -69,7 +69,6 @@ void parseArgs(int size, char** args){
 
             }else if(param.rfind("--output=") == 0){
                 outputpath.append(expandPath(param.substr(9, param.size() - 9).c_str()));
-                validateFile(outputpath);
 
             }else{
                 std::cerr << "[Error] Invalid command " << param << std::endl;
