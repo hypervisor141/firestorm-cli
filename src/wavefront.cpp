@@ -114,7 +114,7 @@ void wavefront::readUV(std::string &line){
     int index = line.find(" ");
 
     tmptexcoords.push_back(std::stof(line.substr(0, index)));
-    tmptexcoords.push_back(1 - std::stof(line.substr(index + 1)));
+    tmptexcoords.push_back(std::stof(line.substr(index + 1)));
 
     uvcount++;
 };
@@ -178,14 +178,16 @@ void wavefront::resolve(entry *data, bool showprogress){
 
     PROGRESSTEXT.clear();
 
-    for(unsigned int i = 0; i < faces.size(); i++){
+    unsigned int size = faces.size();
+
+    for(unsigned int i = 0; i < size; i++){
         face *f1 = faces.at(i);
         int found = -1;
 
         if(showprogress){
-            unsigned int size = PROGRESSTEXT.size();
+            unsigned int size2 = PROGRESSTEXT.size();
 
-            for(unsigned int index = 0; index < size; index++){
+            for(unsigned int index = 0; index < size2; index++){
                 PROGRESSTEXT.replace(index, 1, "\b");
             }
 
@@ -199,8 +201,10 @@ void wavefront::resolve(entry *data, bool showprogress){
 
             std::cout << PROGRESSTEXT;
         }
+
+        unsigned int size3 = tracker.size();
         
-        for(unsigned int i2 = 0; i2 < tracker.size(); i2++){
+        for(unsigned int i2 = 0; i2 < size3; i2++){
             face *f2 = tracker.at(i2);
             
             if(f1->positionindex == f2->positionindex && f1->uvindex == f2->uvindex && f1->normalindex == f2->normalindex){
@@ -217,19 +221,23 @@ void wavefront::resolve(entry *data, bool showprogress){
             int uvindex = (f1->uvindex - uoffset) * 2;
             int normalindex = (f1->normalindex - noffset) * 3;
 
-            positions.push_back(tmppositions.at(positionindex));
-            positions.push_back(tmppositions.at(positionindex + 1));
-            positions.push_back(tmppositions.at(positionindex + 2));
+            if(positionindex >= 0){
+                positions.push_back(tmppositions.at(positionindex));
+                positions.push_back(tmppositions.at(positionindex + 1));
+                positions.push_back(tmppositions.at(positionindex + 2));
 
-            texcoords.push_back(tmptexcoords.at(uvindex));
-            texcoords.push_back(tmptexcoords.at(uvindex + 1));
-
-            normals.push_back(tmpnormals.at(normalindex));
-            normals.push_back(tmpnormals.at(normalindex + 1));
-            normals.push_back(tmpnormals.at(normalindex + 2));
-
-            indices.push_back((short)(positions.size() / 3 - 1));
-
+                indices.push_back((short)(positions.size() / 3 - 1));
+            }
+            if(uvindex >= 0){
+                texcoords.push_back(tmptexcoords.at(uvindex));
+                texcoords.push_back(tmptexcoords.at(uvindex + 1));
+            }
+            if(normalindex >= 0){
+                normals.push_back(tmpnormals.at(normalindex));
+                normals.push_back(tmpnormals.at(normalindex + 1));
+                normals.push_back(tmpnormals.at(normalindex + 2));
+            }
+            
             tracker.push_back(f1);
         }
     }

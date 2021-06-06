@@ -8,12 +8,14 @@
 
 namespace fsystem = std::filesystem;
 
+
 void printUsage(){
-    std::string info(" FireStorm's official .fsm file generator, using .obj and .ply as inputs.\n \
+    std::string info(" FireStorm's .fsm file generator, using .obj and .ply as inputs.\n \
     Usage : \n \
-        --help      print this help message\n \
-        --input=     path to an input .obj file\n \
-        --output=    path to output the resulting FSM file\n");
+        --help      Print this help message\n \
+        --input=     Path to an input .obj file\n \
+        --output=    Path to output the resulting FSM file\n \
+        --verbose    More verbose output\n");
 
     std::cout << info << std::endl;
 };
@@ -69,6 +71,9 @@ void parseArgs(int size, char** args){
 
             }else if(param.rfind("--output=") == 0){
                 outputpath.append(expandPath(param.substr(9, param.size() - 9).c_str()));
+
+            }else if(param.rfind("--verbose") == 0){
+                
 
             }else{
                 std::cerr << "[Error] Invalid command " << param << std::endl;
